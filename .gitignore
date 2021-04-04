@@ -1,0 +1,12 @@
+*.class
+*.log
+*.iml
+*.ipr
+*.iws
+.idea
+.history
+.cache
+.lib/
+target/
+app-logs/
+dist/*
