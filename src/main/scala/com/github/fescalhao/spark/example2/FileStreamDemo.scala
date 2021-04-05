@@ -39,7 +39,7 @@ object FileStreamDemo extends Serializable {
 
     val invoiceWriteQuery = flattenedDF.writeStream
       .format("json")
-      .option("path", "output")
+      .option("path", "output/example2")
       .option("checkpointLocation", "chk-point-dir/example2")
       .outputMode(OutputMode.Append())
       .queryName("Flattened Invoice Write")
