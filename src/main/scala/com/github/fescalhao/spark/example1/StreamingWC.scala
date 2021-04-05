@@ -25,7 +25,7 @@ object StreamingWC extends Serializable {
 
     val wordCountQuery = countDF.writeStream
       .format("console")
-      .option("checkpointLocation", "chk-point-dir")
+      .option("checkpointLocation", "chk-point-dir/example1")
       .outputMode("complete")
       .start()
 
