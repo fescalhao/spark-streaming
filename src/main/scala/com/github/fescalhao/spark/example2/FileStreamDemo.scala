@@ -1,6 +1,6 @@
 package com.github.fescalhao.spark.example2
 
-import com.github.fescalhao.SparkUtils._
+import com.github.fescalhao.Utils.getSparkConf
 import org.apache.log4j.Logger
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._

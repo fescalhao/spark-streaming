@@ -5,7 +5,7 @@ import org.apache.spark.SparkConf
 import java.util.Properties
 import scala.io.Source
 
-package object SparkUtils {
+package object Utils {
   def getSparkConf(appName: String): SparkConf = {
     val sparkConf = new SparkConf()
     val props = new Properties()

@@ -1,11 +1,11 @@
 package com.github.fescalhao.spark.example4
 
-import com.github.fescalhao.SparkUtils._
+import com.github.fescalhao.Utils.getSparkConf
+import com.github.fescalhao.spark.schema.InvoiceSchema.getInvoiceJsonSchema
 import org.apache.log4j.Logger
 import org.apache.spark.sql.functions.{col, expr, from_json, struct, to_json}
 import org.apache.spark.sql.streaming.OutputMode
-import org.apache.spark.sql.{SparkSession, functions}
-import org.apache.spark.sql.types.{ArrayType, DoubleType, IntegerType, LongType, StringType, StructField, StructType}
+import org.apache.spark.sql.SparkSession
 
 object KafkaSinkDemo extends Serializable {
   @transient lazy val logger: Logger = Logger.getLogger(getClass.getName)
@@ -16,36 +16,7 @@ object KafkaSinkDemo extends Serializable {
       .config(getSparkConf("Kafka Sink Demo"))
       .getOrCreate()
 
-    val invoiceSchema = StructType(List(
-      StructField("InvoiceNumber", StringType),
-      StructField("CreatedTime", LongType),
-      StructField("StoreID", StringType),
-      StructField("PosID", StringType),
-      StructField("CashierID", StringType),
-      StructField("CustomerType", StringType),
-      StructField("CustomerCardNo", StringType),
-      StructField("TotalAmount", DoubleType),
-      StructField("NumberOfItems", IntegerType),
-      StructField("PaymentMethod", StringType),
-      StructField("CGST", DoubleType),
-      StructField("SGST", DoubleType),
-      StructField("CESS", DoubleType),
-      StructField("DeliveryType", StringType),
-      StructField("DeliveryAddress", StructType(List(
-        StructField("AddressLine", StringType),
-        StructField("City", StringType),
-        StructField("State", StringType),
-        StructField("PinCode", StringType),
-        StructField("ContactNumber", StringType)
-      ))),
-      StructField("InvoiceLineItems", ArrayType(StructType(List(
-        StructField("ItemCode", StringType),
-        StructField("ItemDescription", StringType),
-        StructField("ItemPrice", DoubleType),
-        StructField("ItemQty", IntegerType),
-        StructField("TotalValue", DoubleType)
-      ))))
-    ))
+    val invoiceSchema = getInvoiceJsonSchema
 
     logger.info("Defining kafka source")
     val kafkaSourceDF = spark
