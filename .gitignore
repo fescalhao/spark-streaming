@@ -12,3 +12,4 @@ app-logs/
 dist/*
 chk-point-dir/*
 output/*
+out/
