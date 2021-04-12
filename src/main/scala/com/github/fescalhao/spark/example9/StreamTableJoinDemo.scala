@@ -20,7 +20,7 @@ object StreamTableJoinDemo extends Serializable {
       .config("spark.cassandra.connection.host", "localhost")
       .config("spark.cassandra.connection.port", "9042")
       .config("spark.sql.catalog.lh", "com.datastax.spark.connector.datasource.CassandraCatalog")
-      .withExtensions(new CassandraSparkExtensions)
+      .config("spark.sql.extensions", "com.datastax.spark.connector.CassandraSparkExtensions")
       .getOrCreate()
 
     logger.info("Defining user login json schema")

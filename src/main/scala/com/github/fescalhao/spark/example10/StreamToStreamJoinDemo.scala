@@ -53,6 +53,7 @@ object StreamToStreamJoinDemo extends Serializable {
       .option("startingOffsets", "earliest")
       .load()
 
+    logger.info("Applying transformations to clicks dataframe")
     val clickDF = clickKafkaSourceDF
       .select(from_json(col("value").cast("string"), clickSchema).alias("value"))
       .select(
@@ -63,13 +64,16 @@ object StreamToStreamJoinDemo extends Serializable {
       .drop("CreatedTime")
       .withWatermark("ClickTime", "30 minute")
 
+    logger.info("Defining a join expression")
     val joinExpr = (impressionDF.col("ImpressionID") === clickDF.col("ImpressionID")) &&
       (clickDF.col("ClickTime") between(impressionDF.col("ImpressionTime"), impressionDF.col("ImpressionTime") + expr("interval 15 minute")))
 
+    logger.info("Joining impressions and clicks dataframes")
     val joinedDF = impressionDF
       .join(clickDF, joinExpr, "leftOuter")
       .drop(clickDF.col("ImpressionID"))
 
+    logger.info("Defining the output query")
     val outputQuery = joinedDF
       .writeStream
       .format("console")
@@ -78,6 +82,7 @@ object StreamToStreamJoinDemo extends Serializable {
       .trigger(Trigger.ProcessingTime("1 minute"))
       .start()
 
+    logger.info("Listening to kafka sources and processing...")
     outputQuery.awaitTermination()
   }
 }
