@@ -1,6 +1,5 @@
 package com.github.fescalhao.spark.example9
 
-import com.datastax.spark.connector.CassandraSparkExtensions
 import com.github.fescalhao.Utils.getSparkConf
 import com.github.fescalhao.spark.schema.UserSchema.getUserLoginJsonSchema
 import org.apache.log4j.Logger
@@ -50,12 +49,6 @@ object StreamTableJoinDemo extends Serializable {
 
     logger.info("Defining the target to update cassandra records")
     val outputQuery =
-//      loginDF
-//      .writeStream
-//      .format("console")
-//      .outputMode(OutputMode.Append())
-//      .option("checkpointLocation", "chk-point-dir/example9")
-//      .start()
       getOutputQuery(outputDF)
 
     logger.info("Waiting for query")
@@ -95,6 +88,13 @@ object StreamTableJoinDemo extends Serializable {
       .foreachBatch(writeToCassandra _)
       .outputMode(OutputMode.Update())
       .option("checkpointLocation", "chk-point-dir/example9")
+      .trigger(Trigger.ProcessingTime("1 minute"))
+      .start()
+
+    outputDF
+      .writeStream
+      .format("console")
+      .outputMode(OutputMode.Update())
       .trigger(Trigger.ProcessingTime("1 minute"))
       .start()
   }

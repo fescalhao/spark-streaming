@@ -1,15 +1,15 @@
-*.class
-*.log
+# Leave entire .idea folder and project folder
+*.idea/*
+*project
 *.iml
-*.ipr
-*.iws
-.idea
-.history
-.cache
-.lib/
-target/
-app-logs/
-dist/*
-chk-point-dir/*
-output/*
-out/
+*chk-point-dir
+*output
+*out
+
+# Leave log files
+*app-logs*
+
+# Leave target directory
+*target/*
+*metastore_db*
+*spark-warehouse*
